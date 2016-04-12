@@ -1,8 +1,5 @@
 <?php
-<<<<<<< Updated upstream
 
-=======
->>>>>>> Stashed changes
 require_once("../config.php");
 header('Content-type:application/json');
 
@@ -31,9 +28,9 @@ function callApi($url)
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     $request = curl_exec($curl);
     $request = json_decode($request);
-    curl_close($curl); 
-    
-    return $request;   	
+    curl_close($curl);
+
+    return $request;
 }
 
 function searchMovies($name)
@@ -75,16 +72,16 @@ function cmp($a, $b)
 }
 
 
-function searchMovieByRelativeKeyWord($word){  
-    
+function searchMovieByRelativeKeyWord($word){
+
     $keywords = callApi(MOVIEDB_URL."search/keyword?query=".$word."&api_key=".API_KEY);
     $storeKeywords = $keywords->results;
-    
+
     for($i= 1 ; $i < sizeof($keywords->results) ; $i++){
         $id = $storeKeywords[$i]->id;
         $movies[$i] = callApi(MOVIEDB_URL."keyword/".$id."/movies?api_key=".API_KEY);
     }
-   
+
     for($i= 1 ; $i < sizeof($movies) ; $i++){
         if(isset($movies[$i]->results)){
             for($j= 0 ; $j < sizeof($movies[$i]->results); $j++){
@@ -97,7 +94,7 @@ function searchMovieByRelativeKeyWord($word){
     $storeMovies = call_user_func_array('array_merge', $movieName);
     return  $storeMovies;
 }
-/////:
+
 
 function searchCaracterMovie($movieSearch)
 {
@@ -109,8 +106,8 @@ function searchCaracterMovie($movieSearch)
             if($character->cast[$j]->character != ''){
                 $movieSearch->character[$i]= $character->cast[$i]->character;
             }
-        }      
-    } 
+        }
+    }
 }
 /*
 function searchAllMoviesAndCharacter($word){

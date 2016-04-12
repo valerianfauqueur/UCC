@@ -41,8 +41,3 @@ catch (Exception $e)
     // Failed to connect
     die('Could not connect');
 }
-<<<<<<< Updated upstream
-=======
-
-
->>>>>>> Stashed changes
