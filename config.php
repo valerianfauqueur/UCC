@@ -1,9 +1,9 @@
 <?php
 
 // require codebird
-require_once('phplibrairies/codebird/src/codebird.php');
+require_once("phplibraries/codebird/src/codebird.php");
 //require abraham Oauth library
-require_once("phplibrairies/twitterOAuth/autoload.php");
+require_once("phplibraries/twitterOAuth/autoload.php");
 
 //define API KEY
 
@@ -25,6 +25,9 @@ define('DB_HOST','127.0.0.1');
 define('DB_NAME','uccapp');
 define('DB_USER','root');
 define('DB_PASS',''); // default on windows
+
+//default site url
+define("URL", "http://localhost/uccapp/");
 
 try
 {

@@ -15,9 +15,6 @@
 
             <nav>
                 <a href="<?= URL?>">Home</a>
-                <a href="<?= URL?>">About</a>
-                <a href="<?= URL?>">News</a>
-                <a href="<?= URL?>"></a>
-                <a href="<?= URL?>"></a>
+                <a href="<?= URL?>secretucc">Manager</a>
             </nav>
         </header>
