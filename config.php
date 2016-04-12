@@ -1,5 +1,10 @@
 <?php
 
+// require codebird
+require_once('phplibrairies/codebird/src/codebird.php');
+//require abraham Oauth library
+require_once("phplibrairies/twitterOAuth/autoload.php");
+
 //define API KEY
 
 define("API_KEY", "e7ba6516f7ea468fdedc6b919afbe1ad");
