@@ -1,10 +1,5 @@
 <?php
 
-// require codebird
-require_once("phplibraries/codebird/src/codebird.php");
-//require abraham Oauth library
-require_once("phplibraries/twitterOAuth/autoload.php");
-
 //define API KEY
 
 define("API_KEY", "e7ba6516f7ea468fdedc6b919afbe1ad");
@@ -16,7 +11,7 @@ define('TWITTER_CONSUMER_KEY', 'bZ86rMgaBilsRpIf3BMxrdJgU');
 define('TWITTER_CONSUMER_SECRET', '1JroLO2bYamPBB6TwhradXh7qT7N0QDimZULImuWfTkLKAFZiI');
 define('TWITTER_ACCESS_TOKEN', '719524911493050370-7tMFCv5SXScQxqsKHg7xfcDlWnreJOp');
 define('TWITTER_ACCESS_TOKEN_SECRET', 'JsyN6MEuWk2KgpQ8QGmuw45PH5gaNc3b4dDztzeTNgDdR');
-define('TWITTER_OAUTH_CALLBACK', 'http://localhost/tweet/tweet-manager.php');
+define('TWITTER_OAUTH_CALLBACK', 'http://localhost/uccapp/login');
 
 
 //database connection and info
@@ -42,8 +37,3 @@ catch (Exception $e)
     // Failed to connect
     die('Could not connect');
 }
-
-//log into bot account with codebird
-\Codebird\Codebird::setConsumerKey(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
-$cb = \Codebird\Codebird::getInstance();
-$cb->setToken(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET);

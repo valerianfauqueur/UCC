@@ -1,45 +1,49 @@
 <?php
-require_once("../config.php");
 use Abraham\TwitterOAuth\TwitterOAuth;
 
 $pdo = $pdo;
+$class="login";
+$title="login";
+$url = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
+$urlParams = parseURLParams($url);
 
-//////////////////////TWITER LOGIN///////////////////////
-//////////////////////TWITER LOGIN///////////////////////
-//////////////////////TWITER LOGIN///////////////////////
-//////////////////////TWITER LOGIN///////////////////////
-
-session_start();
 //if the user isn't logged in and did not authorized the twitter app
+
 if(!isset($_SESSION["oauth_token"]))
 {
     $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
     $requestToken = $connection->oauth("oauth/request_token", array("oauth_callback" => TWITTER_OAUTH_CALLBACK));
     $_SESSION["oauth_token"] = $token = $requestToken["oauth_token"];
     $_SESSION["oauth_token_secret"] = $requestToken["oauth_token_secret"];
+    $_SESSION["previousLoginLocation"] = isset($urlParams->url) ? $urlParams->url[0] : URL;
     switch($connection->getLastHttpCode())
     {
         case 200:
-             $url = $connection->url("oauth/authorize", ["oauth_token" => $token]);
-             header("Location: ".$url);
+             $urlTwitter = $connection->url("oauth/authorize", ["oauth_token" => $token]);
+             header("Location: ".$urlTwitter);
              break;
         default:
             $error["reqToken"] = "Could not connect to Twitter. Refresh the page or try again later.";
     }
-
 }
 if(isset($_SESSION["oauth_token"]))
 {
+
+    echo '<pre>';
+    print_r($urlParams);
+    echo '</pre>';
     //if the user did not authorize the app
-    if(isset($_GET["denied"]) && $_GET["denied"] == $_SESSION["oauth_token"])
+    if(isset($urlParams->denied) && $urlParams->denied[0] === $_SESSION["oauth_token"])
     {
         $error["unauthorizedApp"] = "You did not authorized the application, we can't setup your account retry and authorize if you want to vote";
+        session_unset();
+        session_destroy();
     }
     //if the user authorized the app
-    if(isset($_GET["oauth_token"]) && $_GET["oauth_token"] === $_SESSION["oauth_token"] && isset($_GET["oauth_verifier"]))
+    else if(isset($urlParams->oauth_token) && $urlParams->oauth_token[0] === $_SESSION["oauth_token"] && isset($urlParams->oauth_verifier))
     {
             $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $_SESSION["oauth_token"], $_SESSION["oauth_token_secret"]);
-            $accessToken = $connection->oauth("oauth/access_token", array("oauth_verifier" => $_GET["oauth_verifier"]));
+            $accessToken = $connection->oauth("oauth/access_token", array("oauth_verifier" => $urlParams->oauth_verifier[0]));
             //reseting conncection with correct oauth token and secret token
             $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET, $accessToken["oauth_token"], $accessToken["oauth_token_secret"]);
             $_SESSION["accessToken"] = $accessToken;
@@ -53,6 +57,8 @@ if(isset($_SESSION["oauth_token"]))
                 $user["screenName"] = $userInfo->screen_name;
                 $user["picture"] = $userInfo->profile_image_url;
                 register($user);
+                header("Location:".$_SESSION['previousLoginLocation']);
+                die();
             }
             else
             {
@@ -65,9 +71,16 @@ if(isset($_SESSION["oauth_token"]))
     }
 }
 
+if(isset($error))
+{
+    echo '<pre>';
+    print_r($error);
+    echo '</pre>';
+}
+
 function register($user)
 {
-    $searchUser = $GLOBALS['pdo']->prepare("SELECT twitterID from accounts WHERE twitterID = :id");
+    $searchUser = $GLOBALS['pdo']->prepare("SELECT twitterID, access_level from accounts WHERE twitterID = :id");
     $searchUser->execute(array("id" => $user["id"]));
     $result = $searchUser->fetch();
 
@@ -91,7 +104,7 @@ function register($user)
         $updateUserTokens->bindValue("oauth_secret", $_SESSION['accessToken']["oauth_token_secret"]);
         $execute2 = $updateUserTokens->execute();
     }
-
+    $_SESSION['accessLevel'] = $result->access_level;
     $_SESSION['id'] = $user["id"];
     $_SESSION['username'] = $user["name"];
     $_SESSION['screenName'] = $user["screenName"];
@@ -101,8 +114,27 @@ function register($user)
 
 }
 
+function parseURLParams($url) {
+        $queryStart = strpos($url,"?") + 1;
+        $queryEnd = strlen($url) + 1;
 
-//////////////////////END LOGIN///////////////////////
-//////////////////////END LOGIN///////////////////////
-//////////////////////END LOGIN///////////////////////
-//////////////////////END LOGIN///////////////////////
+        $query = substr($url,$queryStart, $queryEnd - 1);
+        $pairs = explode("&",$query);
+        $parms = new stdClass;
+    if ($query === $url || $query === "") {
+        return;
+    }
+
+    for ($i = 0; $i < count($pairs); $i++) {
+        $nv = explode("=",$pairs[$i]);
+        $n = urldecode($nv[0]);
+        $v = urldecode($nv[1]);
+
+        if (!property_exists($parms,$n)) {
+            $parms->$n = [];
+        }
+
+        array_push($parms->$n,count($nv) === 2 ? $v : null);
+    }
+    return $parms;
+}

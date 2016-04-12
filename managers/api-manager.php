@@ -1,6 +1,6 @@
 <?php
-require 'options.php';
 
+require_once("../config.php");
 header('Content-type:application/json');
 
 $result = array();

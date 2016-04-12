@@ -1,4 +1,6 @@
 <?php
-$class = "admin pannel";
-$test ="test";
-$atat = "tege";
+
+$title = "Admin pannel";
+$class = "admin-pannel";
+
+
