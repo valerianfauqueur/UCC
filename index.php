@@ -43,6 +43,7 @@ $_SESSION['previousLocation'] = isset($_SESSION['location']) ?  $_SESSION['locat
 $_SESSION['location'] = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
 
+
 include "controllers/".$page.".php";
 include "views/partials/header.php";
 include "views/pages/".$page.".php";
