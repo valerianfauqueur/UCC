@@ -1,5 +1,9 @@
 <?php
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 //define API KEY
 
 define("API_KEY", "e7ba6516f7ea468fdedc6b919afbe1ad");
@@ -37,3 +41,8 @@ catch (Exception $e)
     // Failed to connect
     die('Could not connect');
 }
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes

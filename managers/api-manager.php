@@ -1,5 +1,8 @@
 <?php
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 require_once("../config.php");
 header('Content-type:application/json');
 
@@ -26,17 +29,18 @@ function callApi($url)
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    $apiResult = curl_exec($curl);
-    curl_close($curl);
-
-    return $apiResult;
+    $request = curl_exec($curl);
+    $request = json_decode($request);
+    curl_close($curl); 
+    
+    return $request;   	
 }
 
 function searchMovies($name)
 {
     $newName = str_replace(' ', '%20', $name);
     $url = MOVIEDB_URL."search/movie?query=".$newName."&api_key=".API_KEY;
-    $movieResults = json_decode(callApi($url));
+    $movieResults = callApi($url);
     $parsedMovies = startWith($movieResults,$name);
     $organizedMovies = organizeByPopularity($parsedMovies);
     return $organizedMovies;
@@ -70,14 +74,53 @@ function cmp($a, $b)
     return ($a->popularity > $b->popularity) ? -1 : 1;
 }
 
-function searchBar($word){
 
-    $keywords = setCurl('http://api.themoviedb.org/3/search/keyword?query='.$word.'&api_key=e7ba6516f7ea468fdedc6b919afbe1ad');
+function searchMovieByRelativeKeyWord($word){  
+    
+    $keywords = callApi(MOVIEDB_URL."search/keyword?query=".$word."&api_key=".API_KEY);
+    $storeKeywords = $keywords->results;
+    
+    for($i= 1 ; $i < sizeof($keywords->results) ; $i++){
+        $id = $storeKeywords[$i]->id;
+        $movies[$i] = callApi(MOVIEDB_URL."keyword/".$id."/movies?api_key=".API_KEY);
+    }
+   
+    for($i= 1 ; $i < sizeof($movies) ; $i++){
+        if(isset($movies[$i]->results)){
+            for($j= 0 ; $j < sizeof($movies[$i]->results); $j++){
+                $movieName[$i][$j] = new stdClass ;
+                $movieName[$i][$j]->id = $movies[$i]->results[$j]->id;
+                $movieName[$i][$j]->title = $movies[$i]->results[$j]->original_title;
+            }
+        }
+    }
+    $storeMovies = call_user_func_array('array_merge', $movieName);
+    return  $storeMovies;
+}
+/////:
+
+function searchCaracterMovie($movieSearch)
+{
+    $character = callApi(MOVIEDB_URL."movie/".$storeMovies[$i]->id."/credits?api_key=".API_KEY);
+    if(isset($character->cast))
+    {
+        for($i= 0 ; $j < sizeof($character->cast) ; $i++)
+        {
+            if($character->cast[$j]->character != ''){
+                $movieSearch->character[$i]= $character->cast[$i]->character;
+            }
+        }      
+    } 
+}
+/*
+function searchAllMoviesAndCharacter($word){
+
+    $keywords = callApi('http://api.themoviedb.org/3/search/keyword?query='.$word.'&api_key=e7ba6516f7ea468fdedc6b919afbe1ad');
     $storeKeywords = $keywords->results;
 
     for($i= 1 ; $i < sizeof($keywords->results) ; $i++){
         $id = $storeKeywords[$i]->id;
-        $movies[$i] = setCurl('http://api.themoviedb.org/3/keyword/'.$id.'/movies?api_key=e7ba6516f7ea468fdedc6b919afbe1ad');
+        $movies[$i] = callApi('http://api.themoviedb.org/3/keyword/'.$id.'/movies?api_key=e7ba6516f7ea468fdedc6b919afbe1ad');
     }
 
     for($i= 1 ; $i < sizeof($movies) ; $i++){
@@ -92,7 +135,7 @@ function searchBar($word){
     $storeMovies = call_user_func_array('array_merge', $movieName);
 
     for($i= 0 ; $i < sizeof($storeMovies) ; $i++){
-        $character = setCurl('http://api.themoviedb.org/3/movie/'.$storeMovies[$i]->id.'/credits?api_key=e7ba6516f7ea468fdedc6b919afbe1ad');
+        $character = callApi('http://api.themoviedb.org/3/movie/'.$storeMovies[$i]->id.'/credits?api_key=e7ba6516f7ea468fdedc6b919afbe1ad');
 
         if(isset($character->cast)){
             for($j= 0 ; $j <  sizeof($character->cast) ; $j++){
@@ -104,3 +147,4 @@ function searchBar($word){
     }
     return $storeMovies;
  }
+*/
