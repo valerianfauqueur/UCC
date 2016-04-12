@@ -59,8 +59,8 @@ if(isset($_SESSION["oauth_token"]))
                 $user["screenName"] = $userInfo->screen_name;
                 $user["picture"] = $userInfo->profile_image_url;
                 register($user);
-//                header("Location:".$_SESSION['previousLoginLocation']);
-//                die();
+                header("Location:".$_SESSION['previousLoginLocation']);
+                die();
             }
             else
             {
@@ -105,7 +105,7 @@ function register($user)
         $updateUserTokens->bindValue("oauth_secret", $_SESSION['accessToken']["oauth_token_secret"]);
         $execute2 = $updateUserTokens->execute();
     }
-    $_SESSION['accessLevel'] = $result->access_level;
+    $_SESSION['accessLevel'] = isset($result->access_level) ? $result->access_level : 0 ;
     $_SESSION['username'] = $user["name"];
     $_SESSION['screenName'] = $user["screenName"];
     $_SESSION['picture'] = $user["picture"];
