@@ -37,18 +37,11 @@ switch($q)
     break;
 }
 
-
 session_start();
 $_SESSION['previousLocation'] = isset($_SESSION['location']) ?  $_SESSION['location'] : 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 $_SESSION['location'] = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 
-
-
 include "controllers/".$page.".php";
 include "views/partials/header.php";
 include "views/pages/".$page.".php";
-echo "<script src='src/js/controllers/".$page.".js'></script>";
 include "views/partials/footer.php";
-
-
-

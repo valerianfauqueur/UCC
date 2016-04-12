@@ -6,37 +6,34 @@ $class="login";
 $title="login";
 $url = $_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 $urlParams = parseURLParams($url);
+$error = array();
+$_SESSION["previousLoginLocation"] = isset($urlParams->url) ? $urlParams->url[0] : URL;
 
 //if the user isn't logged in and did not authorized the twitter app
 
-if(!isset($_SESSION["oauth_token"]))
+if(!isset($_SESSION["oauth_token"]) && !isset($_SESSION["logged"]))
 {
     $connection = new TwitterOAuth(TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET);
     $requestToken = $connection->oauth("oauth/request_token", array("oauth_callback" => TWITTER_OAUTH_CALLBACK));
     $_SESSION["oauth_token"] = $token = $requestToken["oauth_token"];
     $_SESSION["oauth_token_secret"] = $requestToken["oauth_token_secret"];
-    $_SESSION["previousLoginLocation"] = isset($urlParams->url) ? $urlParams->url[0] : URL;
     switch($connection->getLastHttpCode())
     {
         case 200:
              $urlTwitter = $connection->url("oauth/authorize", ["oauth_token" => $token]);
              header("Location: ".$urlTwitter);
+             die();
              break;
         default:
             $error["reqToken"] = "Could not connect to Twitter. Refresh the page or try again later.";
     }
 }
-if(isset($_SESSION["oauth_token"]))
+if(isset($_SESSION["oauth_token"]) && !isset($_SESSION["logged"]))
 {
-
-    echo '<pre>';
-    print_r($urlParams);
-    echo '</pre>';
     //if the user did not authorize the app
     if(isset($urlParams->denied) && $urlParams->denied[0] === $_SESSION["oauth_token"])
     {
         $error["unauthorizedApp"] = "You did not authorized the application, we can't setup your account retry and authorize if you want to vote";
-        session_unset();
         session_destroy();
     }
     //if the user authorized the app
@@ -50,9 +47,6 @@ if(isset($_SESSION["oauth_token"]))
             //get the user account info data
             $userInfo = $connection->get("account/verify_credentials");
             $user = array();
-            echo '<pre>';
-            print_r($userInfo);
-            echo '</pre>';
             if(!empty($userInfo->id))
             {
                 $user["name"] = $userInfo->name;
@@ -64,20 +58,20 @@ if(isset($_SESSION["oauth_token"]))
             }
             else
             {
-                $error["noAccountData"] = "Something went wrong when trying to retrieve your data";
+                $error["noAccountData"] = "Something went wrong when trying to retrieve your data. Please retry to log in";
+                session_destroy();
             }
     }
     else
     {
-         $error["unknown"] = "something went wrong please retry to connect";
+         $error["unknown"] = "something went wrong please retry to connect. Please retry to log in";
+         session_destroy();
     }
 }
-
-if(isset($error))
+else
 {
-    echo '<pre>';
-    print_r($error);
-    echo '</pre>';
+    header("Location:".$_SESSION['previousLoginLocation']);
+    die();
 }
 
 function register($user)
@@ -105,6 +99,7 @@ function register($user)
         $updateUserTokens->bindValue("oauth_secret", $_SESSION['accessToken']["oauth_token_secret"]);
         $execute2 = $updateUserTokens->execute();
     }
+    $_SESSION['logged'] = true;
     $_SESSION['accessLevel'] = isset($result->access_level) ? $result->access_level : 0 ;
     $_SESSION['username'] = $user["name"];
     $_SESSION['screenName'] = $user["screenName"];
@@ -115,12 +110,11 @@ function register($user)
 }
 
 function parseURLParams($url) {
-        $queryStart = strpos($url,"?") + 1;
-        $queryEnd = strlen($url) + 1;
-
-        $query = substr($url,$queryStart, $queryEnd - 1);
-        $pairs = explode("&",$query);
-        $parms = new stdClass;
+    $queryStart = strpos($url,"?") + 1;
+    $queryEnd = strlen($url) + 1;
+    $query = substr($url,$queryStart, $queryEnd - 1);
+    $pairs = explode("&",$query);
+    $parms = new stdClass;
     if ($query === $url || $query === "") {
         return;
     }
