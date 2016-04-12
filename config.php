@@ -1,9 +1,6 @@
 <?php
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
 //define API KEY
 
 define("API_KEY", "e7ba6516f7ea468fdedc6b919afbe1ad");
