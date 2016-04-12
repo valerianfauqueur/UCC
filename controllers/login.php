@@ -50,15 +50,17 @@ if(isset($_SESSION["oauth_token"]))
             //get the user account info data
             $userInfo = $connection->get("account/verify_credentials");
             $user = array();
+            echo '<pre>';
+            print_r($userInfo);
+            echo '</pre>';
             if(!empty($userInfo->id))
             {
-                $user["id"] = $userInfo->id;
                 $user["name"] = $userInfo->name;
                 $user["screenName"] = $userInfo->screen_name;
                 $user["picture"] = $userInfo->profile_image_url;
                 register($user);
-                header("Location:".$_SESSION['previousLoginLocation']);
-                die();
+//                header("Location:".$_SESSION['previousLoginLocation']);
+//                die();
             }
             else
             {
@@ -80,14 +82,13 @@ if(isset($error))
 
 function register($user)
 {
-    $searchUser = $GLOBALS['pdo']->prepare("SELECT twitterID, access_level from accounts WHERE twitterID = :id");
-    $searchUser->execute(array("id" => $user["id"]));
+    $searchUser = $GLOBALS['pdo']->prepare("SELECT screen_name, access_level from accounts WHERE screen_name = :screenName");
+    $searchUser->execute(array("screenName" => $user["screenName"]));
     $result = $searchUser->fetch();
 
     // If the user isn't in the database we add him
     if(empty($result)){
-        $addUser = $GLOBALS['pdo']->prepare("INSERT INTO accounts (twitterID, name, screen_name, picture, oauth_token, oauth_secret) VALUES(:id,:name,:screenName,:picture,:oauth_token,:oauth_secret)");
-        $addUser->bindValue("id", $user["id"]);
+        $addUser = $GLOBALS['pdo']->prepare("INSERT INTO accounts (name, screen_name, picture, oauth_token, oauth_secret) VALUES(:name,:screenName,:picture,:oauth_token,:oauth_secret)");
         $addUser->bindValue("name", $user["name"]);
         $addUser->bindValue("screenName", $user["screenName"]);
         $addUser->bindValue("picture", $user["picture"]);
@@ -98,14 +99,13 @@ function register($user)
     else
     {
         // Update the tokens
-        $updateUserTokens = $GLOBALS['pdo']->prepare("UPDATE accounts SET oauth_token = :oauth_token, oauth_secret = :oauth_secret WHERE twitterID = :id");
-        $updateUserTokens->bindValue("id", $user["id"]);
+        $updateUserTokens = $GLOBALS['pdo']->prepare("UPDATE accounts SET oauth_token = :oauth_token, oauth_secret = :oauth_secret WHERE screen_name = :screenName");
+        $updateUserTokens->bindValue("screenName", $user["screenName"]);
         $updateUserTokens->bindValue("oauth_token", $_SESSION['accessToken']["oauth_token"]);
         $updateUserTokens->bindValue("oauth_secret", $_SESSION['accessToken']["oauth_token_secret"]);
         $execute2 = $updateUserTokens->execute();
     }
     $_SESSION['accessLevel'] = $result->access_level;
-    $_SESSION['id'] = $user["id"];
     $_SESSION['username'] = $user["name"];
     $_SESSION['screenName'] = $user["screenName"];
     $_SESSION['picture'] = $user["picture"];
