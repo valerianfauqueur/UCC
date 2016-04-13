@@ -28,6 +28,7 @@
 
 <!-- Page content -->
 <div class="container-fluid">
+<<<<<<< Updated upstream
     <div class="row">
          <!-- Col gauche-->
         <div class="col-sm-3">
@@ -39,11 +40,11 @@
                         <li class="active"><a href="<?= URL?>"><i class="glyphicon glyphicon-cog"></i> Home</a></li>
                         <li><a href="<?= URL?>secretucc"><i class="glyphicon glyphicon-cog"></i> Manager</a></li>
                         <li><a href="<?= URL?>login<?php echo "?url=http://". $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>"><i class="glyphicon glyphicon-cog"></i> Login</a></li>
-                        <li><a href="<?= URL?>logout<?php echo "?url=http://". $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>"><i class="glyphicon glyphicon-cog"></i> Log Out</a></li>                       
+                        <li><a href="<?= URL?>logout<?php echo "?url=http://". $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>"><i class="glyphicon glyphicon-cog"></i> Log Out</a></li>
                     </ul>
                 </li>
             </ul>
-            <hr>         
+            <hr>
             <a href="#"><strong><i class="glyphicon glyphicon-cog"></i> Social Medias</strong></a>
             <hr>
             <ul class="nav nav-pills nav-stacked">
@@ -52,7 +53,7 @@
                 <li><a href="https://fr-fr.facebook.com/" target="_blank"><i class="glyphicon glyphicon-cog"></i> Facebook</a></li>
                 <li><a href="https://plus.google.com/collections/featured" target="_blank"><i class="glyphicon glyphicon-cog"></i> Google+</a></li>
                 <li><a href="https://www.instagram.com/" target="_blank"><i class="glyphicon glyphicon-cog"></i> Instagram</a></li>
-            </ul>        
+            </ul>
              <hr>
             <a href="#"><strong><i class="glyphicon glyphicon-cog"></i> Resources</strong></a>
             <hr>
@@ -65,7 +66,7 @@
             <hr>
         </div>
         <!-- Col central-->
-        <div class="col-sm-9">          
+        <div class="col-sm-9">
             <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Manager</strong></a>
             <hr>
             <div class="row">
@@ -78,7 +79,7 @@
                     </div>
                      <!--Message pannel End-->
                     <hr>
-                     <!-- Search Bar-->    
+                     <!-- Search Bar-->
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <div class="panel-title">
@@ -111,33 +112,28 @@
                                 </div>
                             </form>
                         </div>
-                        <!-- /SearchBar-->    
-                    </div>   
+                        <!-- /SearchBar-->
+                    </div>
                     <hr>
                 </div>
                 <!--Search results-->
                  <!-- Col droite-->
                 <div class="col-md-6">
                      <div class="panel panel-default" id ="fieldResult">
-                        <div class="panel-heading">                       
+                        <div class="panel-heading">
                             <h4>Suggestion Results</h4></div>
                         <div class="panel-body" id ="resultBox">
                             <div class="list-group">
-                                <div class="row"  id="results">              
+                                <div class="row"  id="results">
                                     <div id="item">
                                      <!--Search results ajax call->Php-->
                                     </div>
-                                </div>        
+                                </div>
                             </div>
                         </div>
-                    </div>        
+                    </div>
                 </div>
                 <!--/Search results-->
-            </div>
-        </div>
-    </div>
-</div>
-
 <?php } else { ?>
     <p>Unauthorized to access this page. <a href="<?= URL ?>">Return to home</a></p>
 <?php } ?>

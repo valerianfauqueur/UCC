@@ -4,22 +4,29 @@ require_once("../config.php");
 header('Content-type:application/json');
 
 $result = array();
+$arg = array();
 
 if(isset($_POST['functionname']))
 {
-    $arg1 = strip_tags(trim($_POST["arguments"][0]));
+    if(isset($_POST['arguments']))
+    {
+        foreach($_POST["arguments"] as $key => $value)
+        {
+            $arg[$key] = strip_tags(trim($value));
+        }
+    }
     switch($_POST['functionname']) {
         case "searchMovies":
-            $result['result'] = searchMovies($arg1);      
+            $result = isset($arg[1]) ? searchMovies($arg[0],$arg[1]) : searchMovies($arg[0]);
         break;
         case "searchMovieByRelativeKeyWord":
-            $result = searchMovieByRelativeKeyWord($arg1);
+            $result = searchMovieByRelativeKeyWord($arg[0]);
         break;
         case "searchCaracterMovie":
-            $result = searchCaracterMovie($arg1);
+            $result = searchCaracterMovie($arg[0]);
         break;
         default:
-           $aResult['error'] = 'Not found function '.$_POST['functionname'].'!';
+           $result['error'] = 'Not found function '.$_POST['functionname'].'!';
     }
 }
 
@@ -32,6 +39,7 @@ function callApi($url)
     $curl = curl_init();
     curl_setopt($curl, CURLOPT_URL, $url);
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($curl, CURLOPT_USERAGENT, 'Codular Sample cURL Request');
     $request = curl_exec($curl);
     $request = json_decode($request);
     curl_close($curl);
@@ -39,27 +47,28 @@ function callApi($url)
     return $request;
 }
 
-function searchMovies($name)
+function searchMovies($name,$page = 1)
 {
     $newName = str_replace(' ', '%20', $name);
-    $url = MOVIEDB_URL."search/movie?query=".$newName."&api_key=".API_KEY;
+    $url = MOVIEDB_URL."search/movie?query=".$newName."&page=".$page."&api_key=".API_KEY;
     $movieResults = callApi($url);
+    $organizedMovies = new stdClass;
+    $organizedMovies->total_page = $movieResults->total_pages;
     $parsedMovies = startWith($movieResults,$name);
-    $organizedMovies = organizeByPopularity($parsedMovies);
+    $organizedMovies->results = organizeByPopularity($parsedMovies);
     return $organizedMovies;
 }
 
 
 function startWith($movies,$str)
 {
-    $parsedResults = new stdClass;
-    $parsedResults->results = array();
+    $parsedResults = array();
     $str = strtolower($str);
     for($i=0, $l=count($movies->results); $i < $l; $i++)
     {
         if(preg_match('/^'.$str.'/',strtolower($movies->results[$i]->title)))
         {
-            array_push($parsedResults->results, $movies->results[$i]);
+            array_push($parsedResults, $movies->results[$i]);
         }
     }
     return $parsedResults;
@@ -67,9 +76,9 @@ function startWith($movies,$str)
 
 function organizeByPopularity($movies)
 {
-    usort($movies->results, "cmp");
+    usort($movies, "cmp");
     $organizedMovies = new stdClass;
-    $organizedMovies->results = $movies->results;
+    $organizedMovies = $movies;
     return $organizedMovies;
 }
 
@@ -84,22 +93,22 @@ function searchMovieByRelativeKeyWord($word){
     $keywords = callApi(MOVIEDB_URL."search/keyword?query=".$word."&api_key=".API_KEY);
     $storeKeywords = $keywords->results;
 
-    for($i= 1 ; $i < sizeof($keywords->results) ; $i++){
+    for($i= 1, $l = count($keywords->results); $i < $l ; $i++){
         $id = $storeKeywords[$i]->id;
         $movies[$i] = callApi(MOVIEDB_URL."keyword/".$id."/movies?api_key=".API_KEY);
     }
 
-    for($i= 1 ; $i < sizeof($movies) ; $i++){
+    for($i= 1, $l = count($movies); $i < $l ; $i++){
         if(isset($movies[$i]->results)){
-            for($j= 0 ; $j < sizeof($movies[$i]->results); $j++){
-                $movieName[$i][$j] = new stdClass ;
+            for($j= 0, $l = count($movies[$i]->results); $j < $l; $j++){
+                $movieName[$i][$j] = new stdClass;
                 $movieName[$i][$j]->id = $movies[$i]->results[$j]->id;
                 $movieName[$i][$j]->title = $movies[$i]->results[$j]->original_title;
             }
         }
     }
     $storeMovies = call_user_func_array('array_merge', $movieName);
-    return  $storeMovies;
+    return $storeMovies;
 }
 
 
@@ -115,9 +124,15 @@ function searchCaracterMovie($requestID)
             }
         }
     }
-  return $movieSearch;  
+  return $movieSearch;
 }
 
+function limit($array,$start,$end)
+{
+    // substract one so you can query 1 to 20 and not 0 to 19
+    $start = $start - 1;
+    return array_splice($array,$start,$end);
+}
 
 /*
 function searchAllMoviesAndCharacter($word){
