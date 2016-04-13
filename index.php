@@ -41,6 +41,5 @@ include "views/partials/header.php";
 include "views/pages/".$page.".php";
 //echo"<script src='src/js/libs/jquery-2.2.3.min.js'></script>";
 //echo"<script src='src/js/libs/jquery-ui.min.js'></script>";
-echo "<script src='src/js/controllers/".$page.".js'></script>";
 include "views/partials/footer.php";
 
