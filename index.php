@@ -4,11 +4,6 @@ require_once("phplibraries/codebird/src/codebird.php");
 //require abraham Oauth library
 require_once("phplibraries/twitterOAuth/autoload.php");
 
-// require codebird
-require_once("phplibraries/codebird/src/codebird.php");
-//require abraham Oauth library
-require_once("phplibraries/twitterOAuth/autoload.php");
-
 require_once("config.php");
 
 //log into bot account with codebird
@@ -44,15 +39,8 @@ $_SESSION['location'] = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 include "controllers/".$page.".php";
 include "views/partials/header.php";
 include "views/pages/".$page.".php";
-<<<<<<< Updated upstream
-include "views/partials/footer.php";
-=======
 //echo"<script src='src/js/libs/jquery-2.2.3.min.js'></script>";
 //echo"<script src='src/js/libs/jquery-ui.min.js'></script>";
 echo "<script src='src/js/controllers/".$page.".js'></script>";
 include "views/partials/footer.php";
 
-
-
-
->>>>>>> Stashed changes

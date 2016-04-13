@@ -13,7 +13,7 @@
                 type: "POST",
                 url: "http://localhost/uccapp/managers/api-manager.php",
                 data: {
-                    functionTwo: 'searchMovieByRelativeKeyWord',
+                    functionname: 'searchMovieByRelativeKeyWord',
                     arguments: [inputText]
                 },
                 success: function(data) {
@@ -47,7 +47,7 @@
                 type: "POST",
                 url: "http://localhost/uccapp/managers/api-manager.php",
                 data: {
-                    functionThree: 'searchCaracterMovie',
+                    functionname: 'searchCaracterMovie',
                     arguments: [inputText]
                 },
                 success: function(data) {           

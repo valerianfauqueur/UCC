@@ -4,45 +4,25 @@ require_once("../config.php");
 header('Content-type:application/json');
 
 $result = array();
-/*
-if(isset($_POST['functionOne']))
+
+if(isset($_POST['functionname']))
 {
     $arg1 = strip_tags(trim($_POST["arguments"][0]));
-    switch($_POST['functionOne']) {
+    switch($_POST['functionname']) {
         case "searchMovies":
-            $result['result'] = searchMovies($arg1);
-            var_dump($result);
+            $result['result'] = searchMovies($arg1);      
         break;
-
-        default:
-           $aResult['error'] = 'Not found function '.$_POST['functionname'].'!';
-    }
-}
-*/
-if(isset($_POST['functionTwo']))
-{
-    $arg2 = strip_tags(trim($_POST["arguments"][0]));
-    switch($_POST['functionTwo']) {
         case "searchMovieByRelativeKeyWord":
-            $result = searchMovieByRelativeKeyWord($arg2);
+            $result = searchMovieByRelativeKeyWord($arg1);
         break;
-
-        default:
-           $aResult['error'] = 'Not found function '.$_POST['functionname'].'!';
-    }
-}
-if(isset($_POST['functionThree']))
-{
-    $arg3 = strip_tags(trim($_POST["arguments"][0]));
-    switch($_POST['functionThree']) {
         case "searchCaracterMovie":
-            $result = searchCaracterMovie($arg3);
+            $result = searchCaracterMovie($arg1);
         break;
-
         default:
            $aResult['error'] = 'Not found function '.$_POST['functionname'].'!';
     }
 }
+
 
 echo json_encode($result);
 

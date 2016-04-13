@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="src/css/style.css">
     </head>
     <body class="page-<?= $class ?>">
-     
+
         <div class="container">                
             <div class="page-header">
                 <div class="spaced-row">
