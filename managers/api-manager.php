@@ -4,13 +4,39 @@ require_once("../config.php");
 header('Content-type:application/json');
 
 $result = array();
-
-if(isset($_POST['functionname']))
+/*
+if(isset($_POST['functionOne']))
 {
     $arg1 = strip_tags(trim($_POST["arguments"][0]));
-    switch($_POST['functionname']) {
+    switch($_POST['functionOne']) {
         case "searchMovies":
             $result['result'] = searchMovies($arg1);
+            var_dump($result);
+        break;
+
+        default:
+           $aResult['error'] = 'Not found function '.$_POST['functionname'].'!';
+    }
+}
+*/
+if(isset($_POST['functionTwo']))
+{
+    $arg2 = strip_tags(trim($_POST["arguments"][0]));
+    switch($_POST['functionTwo']) {
+        case "searchMovieByRelativeKeyWord":
+            $result = searchMovieByRelativeKeyWord($arg2);
+        break;
+
+        default:
+           $aResult['error'] = 'Not found function '.$_POST['functionname'].'!';
+    }
+}
+if(isset($_POST['functionThree']))
+{
+    $arg3 = strip_tags(trim($_POST["arguments"][0]));
+    switch($_POST['functionThree']) {
+        case "searchCaracterMovie":
+            $result = searchCaracterMovie($arg3);
         break;
 
         default:
@@ -42,6 +68,7 @@ function searchMovies($name)
     $organizedMovies = organizeByPopularity($parsedMovies);
     return $organizedMovies;
 }
+
 
 function startWith($movies,$str)
 {
@@ -96,19 +123,22 @@ function searchMovieByRelativeKeyWord($word){
 }
 
 
-function searchCaracterMovie($movieSearch)
+function searchCaracterMovie($requestID)
 {
-    $character = callApi(MOVIEDB_URL."movie/".$storeMovies[$i]->id."/credits?api_key=".API_KEY);
+    $character = callApi(MOVIEDB_URL."movie/".$requestID."/credits?api_key=".API_KEY);
     if(isset($character->cast))
     {
-        for($i= 0 ; $j < sizeof($character->cast) ; $i++)
+        for($i= 0 ; $i < sizeof($character->cast) ; $i++)
         {
-            if($character->cast[$j]->character != ''){
-                $movieSearch->character[$i]= $character->cast[$i]->character;
+            if($character->cast[$i]->character != ''){
+                $movieSearch[$i] = $character->cast[$i]->character;
             }
         }
     }
+  return $movieSearch;  
 }
+
+
 /*
 function searchAllMoviesAndCharacter($word){
 
