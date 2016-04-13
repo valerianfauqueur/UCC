@@ -21,6 +21,9 @@ switch($q)
     case "secretucc":
         $page = "secretucc";
     break;
+    case "sondage":
+        $page = "sondage";
+    break;
     case "logout":
         $page = "logout";
     break;
