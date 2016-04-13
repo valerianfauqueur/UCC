@@ -1,10 +1,10 @@
-
-    
+ 
     var classList = "list-group-item";
     var ulClass = "list-movies";
-
+    
     $('#validate').on('click', function() {
         var inputText = $('#inputkeyword').val();
+        console.log('launch');
         if(inputText.length >= 4)
         {
         console.log(inputText);
@@ -20,25 +20,27 @@
                     $(".list-movies").empty();
                     var movies = data;
                     console.log(movies);
+                    console.log("sucess");
+                    
                     $("#test").empty();
-                    for(var i = 0; i < 2; i++)
+                    for(var i = 0; i < 8; i++)
                     {
-                        $("#item").append("<ul id="+movies[i].id+"first" +"  class="+ulClass+"></ul>");
-                        $("#"+movies[i].id+"first").append( "<li id="+movies[i].id+" class="+classList+" href= "+"#"+movies[i].id+"second"+">"+movies[i].title+"</li>")                 
-                        $("#"+movies[i].id).append("<div id="+movies[i].id+"second"+"></div> ");
+                       $("#item").append("<ul id='"+movies[i].id+"first' class='list-movies'></ul>");   
+                       $("#"+movies[i].id+"first").append( "<li id='"+movies[i].id+"' class='list-group-item' data-target='#"+movies[i].id+"second'>"+movies[i].title+"</li>"); 
+                       $("#"+movies[i].id).append("<div id='"+movies[i].id+"second' ></div>");   
                         
-                        $(".list-group-item").attr("data-toggle","collapse");
-                        $("#"+movies[i].id+"second").addClass("panel-collapse collapse");                 
-                    }
+                       $(".list-group-item").attr("data-toggle","collapse");
+                       $("#"+movies[i].id+"second").addClass("panel-collapse collapse");            
+                    }                                                        
                 },
                 error: function(e){
-                console.log(e);              
+                    console.log(e);              
                 }
             });       
         }
     });
 
-    $(document).on('click', '.list-movies', function() {
+    $("#results").on('click', '.list-movies', function() {
         var context = $(this);
         var inputText = $(this).children(":first").attr('id');
         var target = $(this).children(":first");
@@ -56,9 +58,12 @@
                     var classLi = "list-group-item";
                     for(var i = 0; i < caracter.length; i++)
                     {               
-                        actualTarget.append("<li class="+classLi+">"+ caracter[i] +"</li>");                           
+                        actualTarget.append("<li class="+classLi+">"+ caracter[i] +"</li>");
+                            
                     }
-                    context.removeClass('list-movies');     
+                    context.removeClass('list-movies');
+                    
+                        
                 },
                 error: function(e){
                 console.log(e);        
@@ -66,7 +71,10 @@
         });        
     });
 
-    
+
+                        
+                        
+  /*      $("#item").append("<ul id="+movies[i].id+"first"+" class='list-movies'></ul>");            */     
 
 
 /*
