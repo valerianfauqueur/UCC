@@ -1,3 +1,4 @@
+
 var cache = {},
 nbResultPerPage = 10;
 cache.keyWord = {};
@@ -92,7 +93,35 @@ function getMovies(inputText,sort)
 function renderMovies(movies,page,sort)
 {
     $(".list-movies").empty();
-
+    $("#results").on('click', '.list-movies', function() {
+        var context = $(this);
+        var inputText = $(this).children(":first").attr('id');
+        var target = $(this).children(":first");
+        var actualTarget = $(target).children(":first");   
+        var request=  $.ajax({
+                type: "POST",
+                url: "http://localhost/uccapp/managers/api-manager.php",
+                data: {
+                    functionname: 'searchCaracterMovie',
+                    arguments: [inputText]
+                },
+                success: function(data) {           
+                    var caracter = data;
+                    console.log(caracter);
+                    var classLi = "list-group-item";
+                    for(var i = 0; i < caracter.length; i++)
+                    {               
+                        actualTarget.append("<li class="+classLi+">"+ caracter[i] +"</li>");
+                            
+                    }
+                    context.removeClass('list-movies');                                          
+                },
+                error: function(e){
+                console.log(e);        
+                }
+        });        
+    });
+                   
     var sortBy = sort;
     if(sortBy === "alphabetical")
     {
