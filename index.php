@@ -11,18 +11,25 @@ require_once("config.php");
 $cb = \Codebird\Codebird::getInstance();
 $cb->setToken(TWITTER_ACCESS_TOKEN, TWITTER_ACCESS_TOKEN_SECRET);
 
+$css = false;
+$js = false;
 $q = empty($_GET["q"]) ? "" : $_GET["q"];
 
 switch($q)
 {
     case "":
         $page = "home";
+        $css = true;
     break;
     case "secretucc":
         $page = "secretucc";
+        $css = true;
+        $js = true;
     break;
     case "sondage":
         $page = "sondage";
+        $css = true;
+        $js = true;
     break;
     case "logout":
         $page = "logout";
@@ -42,7 +49,5 @@ $_SESSION['location'] = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
 include "controllers/".$page.".php";
 include "views/partials/header.php";
 include "views/pages/".$page.".php";
-//echo"<script src='src/js/libs/jquery-2.2.3.min.js'></script>";
-//echo"<script src='src/js/libs/jquery-ui.min.js'></script>";
 include "views/partials/footer.php";
 

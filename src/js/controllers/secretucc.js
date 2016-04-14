@@ -1,4 +1,3 @@
-
 var cache = {},
 nbResultPerPage = 10;
 cache.keyWord = {};
@@ -93,35 +92,7 @@ function getMovies(inputText,sort)
 function renderMovies(movies,page,sort)
 {
     $(".list-movies").empty();
-    $("#results").on('click', '.list-movies', function() {
-        var context = $(this);
-        var inputText = $(this).children(":first").attr('id');
-        var target = $(this).children(":first");
-        var actualTarget = $(target).children(":first");   
-        var request=  $.ajax({
-                type: "POST",
-                url: "http://localhost/uccapp/managers/api-manager.php",
-                data: {
-                    functionname: 'searchCaracterMovie',
-                    arguments: [inputText]
-                },
-                success: function(data) {           
-                    var caracter = data;
-                    console.log(caracter);
-                    var classLi = "list-group-item";
-                    for(var i = 0; i < caracter.length; i++)
-                    {               
-                        actualTarget.append("<li class="+classLi+">"+ caracter[i] +"</li>");
-                            
-                    }
-                    context.removeClass('list-movies');                                          
-                },
-                error: function(e){
-                console.log(e);        
-                }
-        });        
-    });
-                   
+
     var sortBy = sort;
     if(sortBy === "alphabetical")
     {
@@ -180,7 +151,7 @@ function renderCharacters(characters,el,elparent)
     var content = "";
     for(var i = 0; i < characters.length; i++)
     {
-        content = content + "<li class='list-group-item character' data-name='"+characters[i]+"'><button class='btn btn-primary characterbtn pull-left'>Add</button>"+ characters[i] +"</li>";
+        content = content + "<li class='list-group-item character' data-name='"+characters[i]+"'><button class='btn btn-sm btn-primary characterbtn pull-left'>Add</button>"+ characters[i] +"</li>";
     }
     var previousHeight = elparent.parent().height();
     content = $(content);
@@ -295,32 +266,34 @@ function setPage(number)
 function addToCharacterPoll(character,filmid)
 {
     var nbinput = modificationPanel.find(".modif-input").length;
-    var input = "<div class='control-group modify-group'><input class='modif-input' type=text name='"+(nbinput+1)+":"+filmid+"' value='"+character+"'><div style='display:inline-block'>"+(nbinput+1)+"/16</div><hr>";
+    var input = "<div class='control-group modify-group'><input class='modif-input form-control' type=text name='"+(nbinput+1)+":"+filmid+"' value='"+character+"'><div style='display:inline-block'>"+(nbinput+1)+"/16</div>";
     modificationPanel.find("#register").before(input);
 }
 
 
-resultPanel.on("click", ".characterbtn", function(){
+resultPanel.on("click", ".characterbtn", function(e){
+    e.stopPropagation();
     console.log($(this).parent().attr("data-name"));
     console.log($(this).parent().parent().parent().attr("id"));
     addToCharacterPoll($(this).parent().attr("data-name"),$(this).parent().parent().parent().attr("id"));
 });
 
-modificationPanelRegister.on("click",function() {
-
+modificationPanelRegister.on("click",function(e) {
     var getInputs = modificationPanel.find(".modif-input");
+    var nameInput = modificationPanel.find("#championshipName").val();
     var inputsDatas = {};
     inputsDatas.characterID = [];
     inputsDatas.characterName = [];
     inputsDatas.filmID = [];
+    inputsDatas.name = nameInput;
     for(var i=0,l=getInputs.length; i<l;i++)
     {
         var splitInputName = $(getInputs[i]).attr("name").split(":");
         inputsDatas.characterID.push(splitInputName[0]);
-        inputsDatas.characterName.push(getInputs.val());
+        inputsDatas.characterName.push($(getInputs[i]).val());
         inputsDatas.filmID.push(splitInputName[1]);
     }
-    console.log(inputsDatas);
+    console.log(inputsDatas.characterName);
     $.ajax({
             type: "POST",
             url: "http://localhost/uccapp/managers/database-manager.php",
