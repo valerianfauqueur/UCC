@@ -13,13 +13,13 @@
     </head>
     <body class="page-<?= $class ?>">
     <?php
-        if($adminPannel === true)
+        if($adminPanel === true)
         {
-            include "views/partials/header-admin.php"
+            include "views/partials/header-admin.php";
         }
         else
         {
-            include "views/partials/header-basic.php"
+            include "views/partials/header-basic.php";
         }
     ?>
 

@@ -1,34 +1,6 @@
 <?php if(isset($_SESSION["accessLevel"]) && $_SESSION["accessLevel"] == 1){ ?>
-
-<!-- Header -->
-<div id="top-nav" class="navbar navbar-inverse navbar-static-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">UCC Manager</a>
-        </div>
-        <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" role="button" data-toggle="dropdown" href="#"><i class="glyphicon glyphicon-user"></i> Admin <span class="caret"></span></a>
-                    <ul id="g-account-menu" class="dropdown-menu" role="menu">
-                        <li><a href="<?= URL?>logout<?php echo "?url=http://". $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']; ?>">My Profile</a></li>
-                    </ul>
-                </li>
-                <li><a href="#"><i class="glyphicon glyphicon-lock"></i> Logout</a></li>
-            </ul>
-        </div>
-    </div>
-</div>
-<!-- /Header -->
-
 <!-- Page content -->
 <div class="container-fluid">
-<<<<<<< Updated upstream
     <div class="row">
          <!-- Col gauche-->
         <div class="col-sm-3">
@@ -66,7 +38,7 @@
             <hr>
         </div>
         <!-- Col central-->
-        <div class="col-sm-9">
+        <div id="central-panel" class="col-sm-9">
             <a href="#"><strong><i class="glyphicon glyphicon-dashboard"></i> My Manager</strong></a>
             <hr>
             <div class="row">
@@ -91,9 +63,18 @@
                                 <div class="control-group">
                                     <label>Research by</label>
                                     <div class="controls">
-                                        <select class="form-control">
-                                            <option>KeyWords</option>
-                                            <option>Movie Name</option>
+                                        <select id="type" class="form-control">
+                                            <option value="keyword">Keywords</option>
+                                            <option value="movie">Movie name</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label>Sort</label>
+                                    <div class="controls">
+                                        <select id="sort" class="form-control">
+                                            <option value="popularity">Popularity</option>
+                                            <option value="alphabetical">Alphabetically</option>
                                         </select>
                                     </div>
                                 </div>
@@ -108,6 +89,9 @@
                                     <label></label>
                                     <div class="controls">
                                        <input type="button" id="validate" value="validate" class="btn btn-primary">
+                                       <div id="loader" style="display:none" class="pull-right">
+                                            <img src="src/img/loader.gif" alt="This will display an animated GIF">
+                                       </div>
                                     </div>
                                 </div>
                             </form>
@@ -115,10 +99,24 @@
                         <!-- /SearchBar-->
                     </div>
                     <hr>
+                    <div class="panel panel-default" id="form-modification">
+                        <div class="panel-heading">
+                            <div class="panel-title">
+                                <h4>Manual change</h4>
+                            </div>
+                        </div>
+                        <div class="panel-body" id="manual-entries">
+                            <form class="form form-vertical">
+                                <div id="register" class="control-group">
+                                   <input type="button" id="registerbtn" value="register" class="btn btn-primary">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <!--Search results-->
                  <!-- Col droite-->
-                <div class="col-md-6">
+                <div id="right-panel" class="col-md-6">
                      <div class="panel panel-default" id ="fieldResult">
                         <div class="panel-heading">
                             <h4>Suggestion Results</h4></div>
@@ -133,7 +131,11 @@
                         </div>
                     </div>
                 </div>
-                <!--/Search results-->
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php } else { ?>
     <p>Unauthorized to access this page. <a href="<?= URL ?>">Return to home</a></p>
 <?php } ?>

@@ -2,7 +2,7 @@
 
 $class = "sondage";
 $title = "Sondage";
-
+$adminPannel = true;
 $errors = array();
 $question = array();
 

@@ -1,101 +1,119 @@
 var cache = {},
-classList = "list-group-item",
-ulClass = "list-movies",
-nbResultPerPage = 20;
+nbResultPerPage = 10;
 cache.keyWord = {};
 cache.movie = {};
+var resultPanel = $("#central-panel #right-panel #item");
+var modificationPanel = $("#central-panel #form-modification #manual-entries");
+var modificationPanelRegister = modificationPanel.find("#registerbtn");
+var nbPagination = 2;
 
 $('#validate').on('click', function() {
     var inputText = $('#inputkeyword').val();
-    var selectValue = $("form div div select").val();
-    if(selectValue === "keyword")
+    var typeValue = $(".panel-body .form .controls #type.form-control").val();
+    var sortValue = $(".panel-body .form .controls #sort.form-control").val();
+    if(inputText.length > 2)
     {
-        if(!cache.keyWord.hasOwnProperty(inputText))
+        if(typeValue === "keyword")
         {
-            getMoviesByRelativeKeyWord(inputText);
+            if(!cache.keyWord.hasOwnProperty(inputText))
+            {
+                getMoviesByRelativeKeyWord(inputText,sortValue);
+                $('#loader').show();
+            }
+            else
+            {
+                var activePage = $("#central-panel #right-panel #item #pagination .active-page");
+                renderMovies(cache.keyWord[inputText],activePage.attr("data-page"),sortValue);
+            }
         }
-        else
+        else if (typeValue === "movie")
         {
-            renderMoviesByRelativeKeyWord(cache.keyWord[inputText]);
-        }
-    }
-    else if (selectValue === "movie")
-    {
-        if(!cache.movie.hasOwnProperty(inputText).hasOwnProperty(1))
-        {
-            getMovies(inputText);
-        }
-        else
-        {
-            renderMovies((cache.movie[inputText][1]));
+            if(!cache.movie.hasOwnProperty(inputText))
+            {
+                getMovies(inputText,sortValue);
+                $('#loader').show();
+            }
+            else
+            {
+                var activePage = $("#central-panel #right-panel #item #pagination .active-page");
+                renderMovies(cache.movie[inputText],activePage.attr("data-page"),sortValue);
+            }
         }
     }
 });
 
-function getMoviesByRelativeKeyWord(inputText)
+function getMoviesByRelativeKeyWord(inputText,sort)
 {
-    if(inputText.length >= 4)
-    {
-        $.ajax({
-            type: "POST",
-            url: "http://localhost/uccapp/managers/api-manager.php",
-            data: {
-                functionname: 'searchMovieByRelativeKeyWord',
-                arguments: [inputText]
-            },
-            success: function(data) {
-                cache.keyWord[inputText] = data;
-                cache.keyWord[inputText].totalPage = Math.floor(data.length/nbResultPerPage);
-                renderMoviesByRelativeKeyWord(data);
-            }
-        });
-    }
+    $.ajax({
+        type: "POST",
+        url: "http://localhost/uccapp/managers/api-manager.php",
+        data: {
+            functionname: 'searchMovieByRelativeKeyWord',
+            arguments: [inputText]
+        },
+        success: function(data) {
+            cache.keyWord[inputText] = data;
+            cache.keyWord[inputText].totalPage = Math.floor(data.length/nbResultPerPage)+1;
+            renderMovies(data,1,sort);
+            renderPages(inputText,"keyword");
+        },
+        error: function(e)
+        {
+            $('#loader').hide();
+        }
+    });
 }
 
-function renderMoviesByRelativeKeyWord(movies)
-{
-    $(".list-movies").empty();
-    $("#test").empty();
-    for(var i = 0, l=movies.length; i < l; i++)
-    {
-        $("#item").append("<ul id='"+movies[i].id+"first'"+"class='"+ulClass+"'></ul>");
-        $("#"+movies[i].id+"first").append( "<li id="+movies[i].id+" class="+classList+" href= "+"#"+movies[i].id+"second"+">"+movies[i].title+"</li>")
-        $("#"+movies[i].id).append("<div id="+movies[i].id+"second"+"></div> ");
-        $(".list-group-item").attr("data-toggle","collapse");
-        $("#"+movies[i].id+"second").addClass("panel-collapse collapse");
-    }
-}
 
-function getMovies(inputText,page2)
+function getMovies(inputText,sort)
 {
-   var page = page2 ? page2 : 1;
+   sort = sort ? sort : "undefined";
    $.ajax({
            type: "POST",
            url: "http://localhost/uccapp/managers/api-manager.php",
            data: {
                functionname: 'searchMovies',
-               arguments: [inputText, page]
+               arguments: [inputText]
            },
            success: function(data) {
-               cache.movie[inputText] = {};
-               cache.movie[inputText][page] = data.results;
+               cache.movie[inputText] = data.results;
                cache.movie[inputText].totalPage = data.total_page;
-               renderMovies(data.results);
+               renderMovies(data.results,1,sort);
+               renderPages(inputText, "movie");
+
            },
-            error: function(e){
-                console.log(e.responseText);
+            error: function(e)
+            {
+                $('#loader').hide();
             }
     });
 }
 
-function renderMovies(movies)
+function renderMovies(movies,page,sort)
 {
-    console.log(movies);
     $(".list-movies").empty();
-    for(var i = 0, l = movies.length; i < l; i++)
+
+    var sortBy = sort;
+    if(sortBy === "alphabetical")
     {
-        $("#test").append("<span>"+movies[i].title+"</span><br>");
+        sortAlphabetically(movies);
     }
+    else if (sortBy === "popularity")
+    {
+        sortByPopularity(movies);
+    }
+    movies = limit(movies, page);
+    var content = "";
+    for(var i = 0, l=movies.length; i < l; i++)
+    {
+         content += "<ul id='"+movies[i].id+"first' class='list-movies'>"+
+                            "<li id='"+movies[i].id+"' class='list-group-item' data-target='#"+movies[i].id+"second' data-toggle='collapse'>"+
+                                movies[i].title+
+                                "<div id='"+movies[i].id+"second' class='panel-collapse collapse'></div>"+
+                            "</li>"+
+                        "</ul>";
+    }
+    resultPanel.prepend($(content));
 }
 
 $("#results").on('click', '.list-movies', function() {
@@ -103,7 +121,10 @@ $("#results").on('click', '.list-movies', function() {
     var inputText = $(this).children(":first").attr('id');
     var target = $(this).children(":first");
     var actualTarget = $(target).children(":first");
-    getCharacters(inputText,actualTarget,context);
+    if(actualTarget.find(".list-group-item").length === 0)
+    {
+        getCharacters(inputText,actualTarget,context);
+    }
 });
 
 function getCharacters(inputText,el,context)
@@ -112,14 +133,15 @@ function getCharacters(inputText,el,context)
             type: "POST",
             url: "http://localhost/uccapp/managers/api-manager.php",
             data: {
-                functionname: 'searchCaracterMovie',
+                functionname: 'searchCharactersMovie',
                 arguments: [inputText]
             },
             success: function(data) {
                 renderCharacters(data,el,context);
             },
-            error: function(e){
-            console.log(e);
+            error: function(e)
+            {
+                $('#loader').hide();
             }
     });
 }
@@ -127,10 +149,9 @@ function getCharacters(inputText,el,context)
 function renderCharacters(characters,el,elparent)
 {
     var content = "";
-    console.log(characters);console.log(elparent);
     for(var i = 0; i < characters.length; i++)
     {
-        content = content + "<li class='list-group-item'>"+ characters[i] +"</li>";
+        content = content + "<li class='list-group-item character' data-name='"+characters[i]+"'><button class='btn btn-primary characterbtn pull-left'>Add</button>"+ characters[i] +"</li>";
     }
     var previousHeight = elparent.parent().height();
     content = $(content);
@@ -143,5 +164,163 @@ function renderCharacters(characters,el,elparent)
         elparent.height("auto");
     });
     content.slideDown();
-    elparent.removeClass('list-movies');
+}
+
+function renderPages(word,type,next)
+{
+    $('#loader').hide();
+    deletePagination();
+    next = next ? next : false;
+    var content = "";
+    if(type === "keyword")
+    {
+        var nbPageTotal = cache.keyWord[word].totalPage;
+    }
+    else if(type === "movie")
+    {
+        var nbPageTotal = cache.movie[word].totalPage;
+    }
+    if(next == false)
+    {
+        if(nbPageTotal <= nbPagination)
+        {
+            for(var i = 1, l=nbPageTotal; i <= l;i++)
+            {
+                content += "<button data-page='"+i+"' class='btn btn-link' onclick='setPage("+i+")'>"+i+"</button>";
+            }
+            $("<div id='pagination' data-type='"+type+"' data-word='"+word+"'>"+content+"</div>").appendTo(resultPanel);
+        }
+        else
+        {
+            for(var i = 1, l=nbPagination; i <= l;i++)
+            {
+                content += "<button data-page='"+i+"' class='btn btn-link' onclick='setPage("+i+")'>"+i+"</button>";
+            }
+            content += "<button class='btn btn-link' onclick='renderPages(`"+word+"`,`"+type+"`,"+i+")'>...</button>";
+            $("<div id='pagination' data-type='"+type+"' data-word='"+word+"'>"+content+"</div>").appendTo(resultPanel);
+        }
+    }
+    else
+    {
+        var previousnext = next-nbPagination;
+        if(next+nbPagination < nbPageTotal)
+        {
+            if(previousnext >= 1)
+            {
+                content += "<button class='btn btn-link' onclick='renderPages(`"+word+"`,`"+type+"`,"+previousnext+")'>...</button>";
+            }
+            for(var i = next, l=next+nbPagination; i < l;i++)
+            {
+                content += "<button data-page='"+i+"' class='btn btn-link' onclick='setPage("+i+")'>"+i+"</button>";
+            }
+            content += "<button class='btn btn-link' onclick='renderPages(`"+word+"`,`"+type+"`,"+i+")'>...</button>";
+            $("<div id='pagination' data-type='"+type+"' data-word='"+word+"'>"+content+"</div>").appendTo(resultPanel);
+        }
+        else
+        {
+            content += "<button class='btn btn-link' onclick='renderPages(`"+word+"`,`"+type+"`,"+previousnext+")'>...</button>";
+            for(var i = next, l=nbPageTotal; i <= l;i++)
+            {
+                content += "<button data-page='"+i+"' class='btn btn-link' onclick='setPage("+i+")'>"+i+"</button>";
+            }
+           $("<div id='pagination' data-type='"+type+"' data-word='"+word+"'>"+content+"</div>").appendTo(resultPanel);
+        }
+    }
+}
+
+function deletePagination()
+{
+    var pagination = $("#central-panel #right-panel #item #pagination");
+    if(pagination.length >0)
+    {
+        pagination.remove();
+    }
+}
+
+function setPage(number)
+{
+    var sortValue = $(".panel-body .form .controls #sort.form-control").val();
+    var pagination = $("#central-panel #right-panel #item #pagination");
+    var previousActive = $("#central-panel #right-panel #item #pagination .active-page");
+    var btn = $("#central-panel #right-panel #item #pagination .btn-link[data-page="+number+"]");
+    if(previousActive.length >0)
+    {
+        previousActive.removeClass("active-page");
+    }
+    btn.addClass("active-page");
+    type = pagination.attr("data-type");
+    word = pagination.attr("data-word");
+    if(type === "keyword")
+    {
+        var movies = cache.keyWord[word];
+        renderMovies(movies,number,undefined);
+    }
+    else if(type === "movie")
+    {
+        var movies = cache.movie[word];
+        renderMovies(movies,number,undefined);
+    }
+
+}
+
+function addToCharacterPoll(character,filmid)
+{
+    var nbinput = modificationPanel.find(".modif-input").length;
+    var input = "<div class='control-group modify-group'><input class='modif-input' type=text name='"+(nbinput+1)+":"+filmid+"' value='"+character+"'><div style='display:inline-block'>"+(nbinput+1)+"/16</div><hr>";
+    modificationPanel.find("#register").before(input);
+}
+
+
+resultPanel.on("click", ".characterbtn", function(){
+    console.log($(this).parent().attr("data-name"));
+    console.log($(this).parent().parent().parent().attr("id"));
+    addToCharacterPoll($(this).parent().attr("data-name"),$(this).parent().parent().parent().attr("id"));
+});
+
+modificationPanelRegister.on("click",function() {
+
+    var getInputs = modificationPanel.find(".modif-input");
+    var inputsDatas = {};
+    inputsDatas.characterID = [];
+    inputsDatas.characterName = [];
+    inputsDatas.filmID = [];
+    for(var i=0,l=getInputs.length; i<l;i++)
+    {
+        var splitInputName = $(getInputs[i]).attr("name").split(":");
+        inputsDatas.characterID.push(splitInputName[0]);
+        inputsDatas.characterName.push(getInputs.val());
+        inputsDatas.filmID.push(splitInputName[1]);
+    }
+    console.log(inputsDatas);
+    $.ajax({
+            type: "POST",
+            url: "http://localhost/uccapp/managers/database-manager.php",
+            data: {
+                functionname: 'registerChampionship',
+                arguments: inputsDatas
+            },
+            success: function(data) {
+                console.log(data);
+            },
+            error: function(e)
+            {
+                $('#loader').hide();
+                console.log(e.responseText);
+            }
+    });
+});
+
+function sortAlphabetically(movies)
+{
+    movies.sort(function(a, b){ return a.title.replace(/\s/g, '').toLowerCase().localeCompare(b.title.replace(/\s/g, '').toLowerCase())});
+}
+
+function sortByPopularity(movies)
+{
+    movies.sort(function(a, b){ return b.popularity-a.popularity });
+}
+
+function limit(movies,page)
+{
+    return movies.slice((page*nbResultPerPage)-nbResultPerPage,(nbResultPerPage*page));
 }
