@@ -1,10 +1,10 @@
 /* 
 	------
-	SIDE NAVIGATION
+	SIDE NAVIGATION (not working properly with php routing)
 	------
 */
 
-.side-nav
+/* .side-nav
 {
 	position: fixed;
 	top: 50%; left: 30px;
@@ -27,7 +27,7 @@
 	background-color: #FFC107;
 	transition: all 0.3s ease;
 }
-
+ */
 /* 
 	------
 	FIRST CONTAINER : HOME
