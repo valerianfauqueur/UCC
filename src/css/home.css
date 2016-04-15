@@ -1,17 +1,17 @@
 /* 
 	------
-	SIDE NAVIGATION (not working properly with php routing)
+	SIDE NAVIGATION
 	------
 */
 
-/* .side-nav
+.side-nav
 {
 	position: fixed;
 	top: 50%; left: 30px;
 	transform: translateY(-50%);
 }
 
-.side-nav a
+.side-nav div
 {	
 	width: 15px;
 	height: 15px;
@@ -20,14 +20,15 @@
 	margin: 20px 10px;
 	display: block;
 	transition: all 0.3s ease;
+	cursor: pointer;
 }
 
-.side-nav a:hover
+.side-nav div:hover
 {
 	background-color: #FFC107;
 	transition: all 0.3s ease;
 }
- */
+
 /* 
 	------
 	FIRST CONTAINER : HOME
@@ -38,8 +39,8 @@
 {
 	background-image: url("../img/home.png");
 	background-repeat: no-repeat;
-	-webkit-background-size: 100%;
-	background-size: 100%;
+	-webkit-background-size: cover;
+	background-size: cover;
 	height: 900px;
 	width: 98%;
 	margin: auto;
@@ -156,6 +157,8 @@
 	background-image: url(../img/home2.png);
 	-webkit-background-size: cover;
 	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
 	padding-top: 100px;
 }
 

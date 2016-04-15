@@ -1,11 +1,11 @@
 <section>
 
-	<!-- <div class="side-nav">
-		<a href=".clear-fix-one" class="shortcut-1 scrollTo"></a>
-		<a href=".clear-fix-two" class="shortcut-2 scrollTo"></a>
-		<a href=".clear-fix-three" class="shortcut-3 scrollTo"></a>
-		<a href=".clear-fix-four" class="shortcut-4 scrollTo"></a>
-	</div> -->
+	<div class="side-nav">
+		<div  class="shortcut-1 scrollTo"></div>
+		<div  class="shortcut-2 scrollTo"></div>
+		<div  class="shortcut-3 scrollTo"></div>
+		<div  class="shortcut-4 scrollTo"></div>
+	</div>
 	
 		<div class="container-one">
 			<div class="back-card">
