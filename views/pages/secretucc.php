@@ -110,15 +110,16 @@
                         </div>
                         <div class="panel-body" id="manual-entries">
                             <form class="form form-vertical">
-                               <input type="text" name="championshipName" id="championshipName" class="form-control" placeholder="Name of your championship">
+                               <input type="text" name="championshipName" id="championshipName" class="form-control" placeholder="Name of your championship">         
                                 <div id="register" class="control-group">
-                                   <input type="button" id="registerbtn" value="register" class="btn btn-primary">
+                                   <input type="button" id="registerbtn" value="register" class="btn btn-primary">                                   
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
                 <!--Search results-->
+               
                  <!-- Col droite-->
                 <div id="right-panel" class="col-md-6">
                      <div class="panel panel-default" id ="fieldResult">
@@ -139,7 +140,6 @@
         </div>
     </div>
 </div>
-
 <?php } else { ?>
     <p>Unauthorized to access this page. <a href="<?= URL ?>">Return to home</a></p>
 <?php } ?>

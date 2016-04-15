@@ -6,6 +6,7 @@ var resultPanel = $("#central-panel #right-panel #item");
 var modificationPanel = $("#central-panel #form-modification #manual-entries");
 var modificationPanelRegister = modificationPanel.find("#registerbtn");
 var nbPagination = 2;
+var dropzones = [];
 
 $('#validate').on('click', function() {
     var inputText = $('#inputkeyword').val();
@@ -265,9 +266,26 @@ function setPage(number)
 
 function addToCharacterPoll(character,filmid)
 {
+    var nbDropZones = modificationPanel.find(".dropzone").length;
     var nbinput = modificationPanel.find(".modif-input").length;
-    var input = "<div class='control-group modify-group'><input class='modif-input form-control' type=text name='"+(nbinput+1)+":"+filmid+"' value='"+character+"'><div style='display:inline-block'>"+(nbinput+1)+"/16</div>";
+    var input = "<div class='control-group modify-group'>"+
+                    "<div class='col-md-10'>"+
+                        "<input class='modif-input form-control pull-left' type=text name='"+(nbinput+1)+":"+filmid+"' value='"+character+"'>"+
+                        "<div style='display:inline-block' class='pull-right'>"+(nbinput+1)+"/16</div>"+                     
+                    "</div>"+
+                "</div>"+
+                    
+                    "<div class='container col-md-4'>"+
+                            "<div class='dropzone dropzone-previews' id='dropzone-"+nbDropZones+"'>"+   
+                                "<div class='my-awesome-dropzone'>"+ 
+                                    "<div class='dz-message needsclick'>Click or drop here to upload a character image</div>"+
+                                "</div>"+
+                            "</div>"+                                       
+                    "</div>";
+                               
+               
     modificationPanel.find("#register").before(input);
+    dropzones[nbDropZones]= new Dropzone("#dropzone-"+nbDropZones,{url:"http://localhost/uccapp/managers/database-manager.php"});
 }
 
 
@@ -326,3 +344,5 @@ function limit(movies,page)
 {
     return movies.slice((page*nbResultPerPage)-nbResultPerPage,(nbResultPerPage*page));
 }
+    
+

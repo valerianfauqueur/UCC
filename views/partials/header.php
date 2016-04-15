@@ -9,6 +9,7 @@
         <?php include "libs.php"; ?>
         <link rel="stylesheet" href="src/css/bootstrap/bootstrap.min.css">
         <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="src/css/dropzone.min.css">
         <link rel="stylesheet" href="src/css/<?= $page ?>.css">
     </head>
     <body class="page-<?= $class ?>">
