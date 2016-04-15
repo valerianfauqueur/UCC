@@ -1,0 +1,122 @@
+/* 
+	------
+	GENERAL SETTINGS
+	------
+ */
+
+body {
+	background-color: #212121;
+	font-family: 'Montserrat', sans-serif;  
+	font-size:14px;
+	color: #fff;
+	line-height: 1;	
+}
+
+.clear-fix
+{
+	height: 75px;
+}
+
+h3
+{
+	width: 1000px;
+	margin: 50px auto 25px;
+	text-align: center;
+	font-size: 40px;
+}
+
+/* 
+	------
+	NAV MENU
+	------
+ */
+
+.nav-menu
+{
+	height: 50px;
+	background-color: #303030;
+	z-index: 999;
+	position: fixed;
+	width: 98%;
+	left: 50%;
+	transform: translateX(-50%);
+}
+
+.nav-menu .logo
+{
+	height: 35px;
+	position: absolute;
+	top: 8px; left: 10px
+}
+
+.nav-menu .logo img
+{
+	height: 100%;
+}
+
+.nav-menu ul
+{
+	width: 665px;
+	margin: auto;
+	padding: 0;
+	font-size: 16px;
+}
+
+.nav-menu ul li
+{
+	display: inline-block;
+	text-align: center;
+	margin: 12px 75px;
+	opacity: 0.8;
+	transition: all 0.3s ease;
+}
+
+.nav-menu ul li:hover
+{
+	opacity: 1;
+	transition: all 0.3s ease;
+}
+
+
+.nav-menu ul li a
+{
+	text-decoration: none;
+	color: #fff;
+}
+
+.nav-menu .sliding-middle-out 
+{
+	display: inline-block;
+	position: relative;
+	padding-bottom: 3px;
+}
+
+.nav-menu .sliding-middle-out:after 
+{
+	content: '';
+	display: block;
+	margin: auto;
+	height: 2px;
+	width: 0px;
+	background: transparent;
+	transition: width .3s ease, background-color .3s ease;
+}
+
+.nav-menu .sliding-middle-out:hover:after 
+{
+	width: 100%;
+	background: #ffc107;
+}
+
+.twitter-login
+{
+	position: absolute;
+	right: 10px; top: 10px;
+	display: block;
+	width: 140px;
+}
+
+.twitter-login img
+{
+	width: 100%;
+}

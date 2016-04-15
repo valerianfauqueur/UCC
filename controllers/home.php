@@ -1,3 +1,3 @@
 <?php
-    $title = "Mon site";
+    $title = "UMC - Ultimate Character Championship";
     $class = "home";

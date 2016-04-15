@@ -21,6 +21,12 @@ switch($q)
         $page = "home";
         $css = true;
     break;
+    case "archives":
+        $page = "archives";
+    break;
+    case "results":
+        $page = "results";
+    break;
     case "secretucc":
         $page = "secretucc";
         $css = true;

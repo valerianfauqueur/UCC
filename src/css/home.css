@@ -1,0 +1,424 @@
+/* 
+	------
+	SIDE NAVIGATION
+	------
+*/
+
+.side-nav
+{
+	position: fixed;
+	top: 50%; left: 30px;
+	transform: translateY(-50%);
+}
+
+.side-nav a
+{	
+	width: 15px;
+	height: 15px;
+	border-radius: 100%;
+	background-color: #fff;
+	margin: 20px 10px;
+	display: block;
+	transition: all 0.3s ease;
+}
+
+.side-nav a:hover
+{
+	background-color: #FFC107;
+	transition: all 0.3s ease;
+}
+
+/* 
+	------
+	FIRST CONTAINER : HOME
+	------
+*/
+
+.container-one
+{
+	background-image: url("../img/home.png");
+	background-repeat: no-repeat;
+	-webkit-background-size: 100%;
+	background-size: 100%;
+	height: 900px;
+	width: 98%;
+	margin: auto;
+	padding-top: 100px;
+} 
+
+.back-card
+{
+	z-index: 2;
+	width: 450px;
+	height: 600px;
+	background-color: #303030;
+	position: relative; 
+	margin: auto;
+}
+
+.front-card
+{
+	width: 400px;
+	height: 550px;
+	background-color: #474646;
+	top: 50%; left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	position: absolute;
+	-webkit-box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.75);
+	box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.75);
+}
+
+.front-card img
+{
+	padding: 30px 20px 0px 20px;
+	display: inline-block;
+	vertical-align: top;
+}
+
+.front-card a
+{
+	color: #ffc107;
+	opacity: 0.8;
+	transition: all .3s ease;
+}
+
+.front-card a:hover
+{
+	color: #ffb300;
+	opacity: 1;
+	transition: all .3s ease;
+}
+
+
+.front-card .description, .front-card .how-to, .front-card .bot, .front-card .next
+{
+	display: inline-block;
+	width: 313px;
+	padding: 45px 20px 0px 0px;
+	vertical-align: top;
+}
+
+.bottom-button
+{
+	width: 100%;
+	height: 75px;
+	background-color: #ffc107;
+	bottom: 0px;
+	position: absolute;
+	font-size: 30px;
+	text-align: center;
+	cursor: pointer;
+	vertical-align: middle;
+	padding: 18px;
+}
+
+.bottom-button-effect
+{
+	height: 0%;
+	width: 100%;
+	background-color: #ffb300;
+	transition: all .3s ease;	
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.bottom-button:hover .bottom-button-effect
+{
+	height: 100%;
+	transition: all .3s ease;
+}
+
+.bottom-button-text
+{
+	position: relative;
+	letter-spacing: 0.1em;
+	font-size: 35px;
+	color: #fff;
+}
+
+
+
+
+/* 
+	------
+	CONTAINER TWO : CURRENT THEME
+	------
+*/
+
+.container-two
+{
+	width: 98%;
+	height: 900px;
+	margin: auto;
+	background-color: #fff;
+	background-image: url(../img/home2.png);
+	-webkit-background-size: cover;
+	background-size: cover;
+	padding-top: 100px;
+}
+
+.actual
+{
+	font-size: 50px;
+	width: 600px;
+	margin: auto;
+	opacity: 0.8;
+	color: #9c9c9c;
+	letter-spacing: 0.1em;
+}
+
+.actual-theme
+{
+	font-size: 80px;
+	width: 600px;
+	margin: 30px auto;
+	font-weight: 700;
+	opacity: 0.7;
+	letter-spacing: 0.1em;
+}
+
+.current-round
+{
+	width: 625px;
+	height: 150px;
+	margin: 175px auto;
+	border: 10px solid #ffc107;
+	color: #ffc107;
+	font-size: 70px;
+	font-weight: 400;
+	position: relative;
+	text-align: center;
+}
+
+.current-round .current-round-nb
+{
+	margin-right: 50px;
+	font-size: 130px;
+	font-weight: 700;
+}
+
+.current-round .exposant
+{
+	font-size: 20px;
+	position: absolute;	
+	top: 25px;
+	left: 170px;
+	font-style: italic;
+}
+
+.current-round .current-round-f
+{
+	font-weight: 700;
+	font-size: 80px;
+	letter-spacing: 0.2em;
+}
+
+.current-round .current-round-inal
+{
+	letter-spacing: 0.2em;
+}
+
+
+
+
+/* 
+	------
+	CONTAINER THREE: VOTE SECTION
+	------
+*/
+
+.container-three
+{
+}
+
+.container-three .wrapper
+{
+	width: 1295px;
+	padding-top: 50px;
+	margin: auto;
+}
+
+.container-three .card-vote
+{
+	width: 485px;
+	height: 220px;	
+	border: 10px solid #303030;
+	display: inline-block;
+	-webkit-box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.75);
+	box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.75);
+	margin: 30px 80px;	
+	position: relative;
+	vertical-align: top;
+}
+
+.container-three .card-vs
+{
+	position: absolute;
+	top: 0px; left: 50%;
+	transform: translateX(-50%);
+	width: 55px;
+	height: 48px;
+	background-color: #303030;
+	font-size: 25px;
+	text-align: center;
+	padding-top: 8px;
+}
+
+.container-three .chara-left
+{
+	background-color: #546e7a;
+	width: 232.5px;
+	height: 100%;
+	display: inline-block;
+	float: left;
+	font-size: 20px;
+	padding-top: 150px;	
+	text-align: center;
+}
+
+.container-three .chara-right
+{
+	background-color: #37474f;
+	width: 232.5px;
+	height: 100%;
+	display: inline-block;
+	font-size: 20px;
+	padding-top: 150px;
+	text-align: center;
+}
+
+.container-three .card-plus
+{
+	width: 40px;
+	height: 40px;
+	background-color: #ffc107;
+	border-radius: 100%;
+	position: absolute;
+	bottom: -25px; left: 50%;
+	transform: translateX(-50%);
+	color: #303030;
+	font-size: 36px;
+	text-align: center;
+	line-height: 42px;
+}
+
+/* 
+	------
+	CONTAINER FOUR: NEXT THEME 
+	------
+*/
+
+.container-four
+{
+	height: 900px;
+}
+
+.container-four .wrapper
+{
+	width: 1200px;
+	height: 700px;
+	margin: auto;
+	position: relative;
+}
+
+.container-four .left-panel
+{
+	float: left;
+}
+
+.container-four .right-panel
+{
+	float: right;
+}
+
+.container-four .vote
+{
+	width: 500px;
+	height: 200px;
+	margin: 100px 0px;
+	background-color: #474646;
+	-webkit-box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.75);
+	box-shadow: 0px 5px 10px 1px rgba(0,0,0,0.75);
+	position: relative;
+}
+
+.container-four .vote-content
+{
+	padding: 20px;
+	font-size: 24px;
+}
+
+.container-four .vote-one
+{
+	background-image: url(../img/batman.jpg);
+	-webkit-background-size: cover;
+	background-size: cover;
+	background-position: 0px -50px;
+	background-repeat: no-repeat;
+}
+
+.container-four .vote-two
+{
+	background-image: url(../img/horror.jpg);
+	-webkit-background-size: cover;
+	background-size: cover;
+	background-repeat: no-repeat;
+}
+
+.container-four .vote-three
+{
+	background-image: url(../img/hetic.png);
+	-webkit-background-size: cover;
+	background-size: cover;
+	background-position: 0px -10px;
+	background-repeat: no-repeat;
+}
+
+.container-four .vote-four
+{
+	background-image: url(../img/action.jpg);
+	-webkit-background-size: cover;
+	background-size: cover;
+	background-position: 0px -20px;
+	background-repeat: no-repeat;
+}
+
+.container-four .vote-button
+{
+	position: absolute;
+	bottom: 0;
+	height: 50px;
+	width: 100%;
+	background-color: #FFC107;
+	font-size: 25px;
+	text-align: center;
+	cursor: pointer;
+	padding: 10px;
+	letter-spacing: 0.1em;
+}
+
+.container-four .vote-button-effect
+{
+	height: 0%;
+	width: 100%;
+	background-color: #ffb300;
+	transition: all .3s ease;	
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+.container-four .vote-button:hover .vote-button-effect
+{
+	height: 100%;
+	transition: all .3s ease;
+}
+
+.container-four .vote-button-text
+{
+	position: relative;
+}

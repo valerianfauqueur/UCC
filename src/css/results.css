@@ -1,0 +1,10 @@
+.results-pic
+{
+	width: 1400px;
+	margin: auto;
+}
+
+.results-pic svg text
+{
+	font-family: 'Montserrat', sans-serif;  
+}
